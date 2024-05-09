@@ -3,10 +3,14 @@ import model
 import pandas as pd
 import sys
 
+
 def message(text):
-    print("=" * 50)
+    length = 30
+    print("=" * length)
     print(text)
-    print("=" * 50)
+    print("=" * length)
+
+
 def main():
     # Preprocessing
     df = pd.read_csv("./data/car_prices.csv")
