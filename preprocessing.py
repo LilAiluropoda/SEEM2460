@@ -35,7 +35,7 @@ def car_preprocessing(df: pd.DataFrame):
     # Transform classes into categorical variables
     df, mapper = transform_categorical(df, ["make", "model", "trim", "body", "transmission", "color", "interior", "seller"])
     # Reduce dataset size
-    df = df.head(100000)
+    #df = df.head(100000)
     df.info()
     return df
 

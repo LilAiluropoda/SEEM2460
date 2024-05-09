@@ -8,6 +8,8 @@ class LightGBM:
     train_round = 1
     param = {
         # TODO: Hyperparameter Tuning
+        "device_type":"cpu",
+        "num_threads":8
     }
 
     def train(self, x_train, y_train, x_test, y_test):
