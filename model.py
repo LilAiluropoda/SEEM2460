@@ -1,6 +1,8 @@
 import lightgbm as lgb
 from catboost import CatBoostRegressor
+import matplotlib.pyplot as plt
 import shap
+import helper
 
 
 class LightGBM:
@@ -13,8 +15,11 @@ class LightGBM:
     }
 
     def train(self, x_train, y_train, x_test, y_test):
+        # Wrapping train and test dataset
         train_data = lgb.Dataset(x_train, label=y_train)
         test_data = lgb.Dataset(x_test, label=y_test)
+
+        # Create model
         self.model = lgb.train(
             self.param,
             num_boost_round=self.train_round,
@@ -25,8 +30,12 @@ class LightGBM:
         return 0
 
     def feature_report(self, x_train, y_train):
+        # initialize JavaScript Visualization Library
         shap.initjs()
-        shap_values = shap.Explainer(self.model)(x_train)
-        clust = shap.utils.hclust(x_train, y_train, linkage="single")
-        shap.plots.bar(shap_values, clustering=clust, clustering_cutoff=1)
+        helper.message("[INFO] Training explainer for LightGBM ...")
+        tree = shap.TreeExplainer(self.model).shap_values(x_train)
+        helper.message("[INFO] Training completed, visualising...")
+        shap.summary_plot(tree, x_train)
+        plt.show()
         return 0
+    
