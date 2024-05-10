@@ -5,7 +5,7 @@ import shap
 
 class LightGBM:
     model = None
-    train_round = 1
+    train_round = 100
     param = {
         # TODO: Hyperparameter Tuning
         "device_type":"cpu",
