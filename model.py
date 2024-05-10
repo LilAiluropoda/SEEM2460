@@ -10,6 +10,7 @@ class LightGBM:
     train_round = 100
     param = {
         # TODO: Hyperparameter Tuning
+        # Must have, cannot be changed
         "device_type":"cpu",
         "num_threads":8
     }
@@ -38,4 +39,33 @@ class LightGBM:
         shap.summary_plot(tree, x_train)
         plt.show()
         return 0
-    
+
+
+class CatBoost:
+    model = None
+    param = {
+        # TODO: Hyperparameter Tuning
+        # Must have, cannot be changed
+        'cat_features': ["make", "model", "trim", "body", "transmission", "color", "interior", "seller"],
+        'verbose': 200
+    }
+
+    def train(self, x_train, y_train, x_test, y_test):
+        self.model = CatBoostRegressor(**self.param)
+        self.model.fit(
+            x_train,
+            y_train,
+            eval_set=(x_test, y_test),
+            use_best_model=True
+        )
+        return 0
+
+    def feature_report(self, x_train, y_train):
+        # initialize JavaScript Visualization Library
+        shap.initjs()
+        helper.message("[INFO] Training explainer for CatBoost ...")
+        tree = shap.TreeExplainer(self.model).shap_values(x_train)
+        helper.message("[INFO] Training completed, visualising...")
+        shap.summary_plot(tree, x_train)
+        plt.show()
+        return 0
