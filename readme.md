@@ -1,5 +1,7 @@
 # SEEM2460 Final Project
 ## Requirement
+Python Version `3.11`
+
 | Package     | Version         |
 |-------------|-----------------|
 | catboost    | 1.2.5 or above  |
