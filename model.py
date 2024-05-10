@@ -46,7 +46,7 @@ class CatBoost:
     param = {
         # TODO: Hyperparameter Tuning
         # Must have, cannot be changed
-        'cat_features': ["make", "model", "trim", "body", "transmission", "color", "interior", "seller"],
+        'cat_features': ["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"],
         'verbose': 200
     }
 
