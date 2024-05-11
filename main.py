@@ -9,7 +9,7 @@ def main():
     # Preprocessing
     df = pd.read_csv("./data/car_prices.csv")
     helper.message("[INFO] Start preprocessing data...")
-    df = pp.car_preprocessing(df)
+    df, mapper, scaler = pp.car_preprocessing(df)
     x_train, x_test, y_train, y_test = pp.generate_dataset(df, "sellingprice", 0.2)
 
     # Train LightGBM
