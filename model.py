@@ -26,7 +26,7 @@ class LightGBM:
         lgbmHP['num_threads'] = 8
         # Create model
         self.model = lgb.train(
-            lgbmHP,
+            self.param,
             num_boost_round=self.train_round,
             train_set=train_data,
             valid_sets=[test_data],
