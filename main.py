@@ -3,7 +3,8 @@ import model
 import pandas as pd
 import sys
 import helper
-
+import search
+import optuna
 
 def main():
     # Preprocessing
@@ -11,7 +12,6 @@ def main():
     helper.message("[INFO] Start preprocessing data...")
     df = pp.car_preprocessing(df)
     x_train, x_test, y_train, y_test = pp.generate_dataset(df, "sellingprice", 0.2)
-
     # Train LightGBM
     helper.message("[INFO] Start training (LightGBM)...")
     lgbm = model.LightGBM()

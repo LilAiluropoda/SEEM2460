@@ -3,7 +3,8 @@ from catboost import CatBoostRegressor
 import matplotlib.pyplot as plt
 import shap
 import helper
-
+import optuna
+import search
 
 class LightGBM:
     model = None
@@ -14,15 +15,18 @@ class LightGBM:
         "device_type":"cpu",
         "num_threads":8
     }
-
+    
     def train(self, x_train, y_train, x_test, y_test):
         # Wrapping train and test dataset
         train_data = lgb.Dataset(x_train, label=y_train)
         test_data = lgb.Dataset(x_test, label=y_test)
-
+        # use optuna to find the HyperParameter
+        lgbmHP = search.getHyperParameter(x_train,x_test,y_train,y_test)
+        lgbmHP['device_type'] = "cpu"
+        lgbmHP['num_threads'] = 8
         # Create model
         self.model = lgb.train(
-            self.param,
+            lgbmHP,
             num_boost_round=self.train_round,
             train_set=train_data,
             valid_sets=[test_data],
