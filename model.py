@@ -5,7 +5,7 @@ import shap
 import helper
 import lgbm_search
 import carboost_search
-import search
+from sklearn.metrics import mean_absolute_error, root_mean_squared_error, mean_absolute_percentage_error
 
 class LightGBM:
     model = None
@@ -44,6 +44,15 @@ class LightGBM:
         shap.summary_plot(tree, x_train)
         plt.show()
         return 0
+    
+    def eval(self, x_test, y_test):
+        y_pred = self.model.predict(x_test)
+        res = ("Evaluation Report (LightGBM)\n\n" +
+                "RMSE: " + str(root_mean_squared_error(y_test, y_pred)) + "\n" +
+                "MAE: " + str(mean_absolute_error(y_test, y_pred)) + "\n")
+                # + "Accuracy (1-MAPE): " + str(mean_absolute_percentage_error(y_test, y_pred)))
+        helper.message(res)
+        return 0
 
 
 class CatBoost:
@@ -51,14 +60,15 @@ class CatBoost:
     param = {
         # TODO: Hyperparameter Tuning
         # Must have, cannot be changed
-        'cat_features':["make", "model", "trim", "body", "transmission", "color", "interior", "seller"],
+        'cat_features':["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"],
         'verbose': 200
     }
        
     def train(self, x_train, y_train, x_test, y_test):
         params = carboost_search.getHyperParameter(x_train,x_test,y_train,y_test)
-        params['cat_features'] =["make", "model", "trim", "body", "transmission", "color", "interior", "seller"]
+        params['cat_features'] =["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"]
         params['verbose'] = 200
+        print(params)
         self.model = CatBoostRegressor(**params)
         self.model.fit(
             x_train,

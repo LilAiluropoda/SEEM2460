@@ -1,7 +1,7 @@
 import numpy as np
 import optuna
 import lightgbm as lgb
-import sklearn.datasets
+from sklearn.metrics import mean_absolute_error,root_mean_squared_error, mean_absolute_percentage_error
 import sklearn.metrics
 
 def objective(trial,x_train,x_test,y_train,y_test):
@@ -26,16 +26,10 @@ def objective(trial,x_train,x_test,y_train,y_test):
         "bagging_freq": trial.suggest_int("bagging_freq", 1, 7),
         "min_child_samples": trial.suggest_int("min_child_samples", 5, 100),
     }
-
- 
- 
     gbm = lgb.train(param, train_data)
-    preds = gbm.predict(x_test)
-    pred_labels = np.rint(preds)
-    print(type(y_test))
-    print(type(pred_labels))
-    accuracy = sklearn.metrics.accuracy_score(y_test, pred_labels)
-    return accuracy
+    y_pred = gbm.predict(x_test)
+    score = root_mean_squared_error(y_test, y_pred)
+    return score
 
 def getHyperParameter(x_train,x_test,y_train,y_test):
     study = optuna.create_study(direction="maximize")

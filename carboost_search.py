@@ -1,28 +1,7 @@
 import numpy as np
 import optuna
-import lightgbm as lgb
-import sklearn.datasets
-import sklearn.metrics
-
-"""
-Optuna example that optimizes a classifier configuration for cancer dataset using
-Catboost.
-
-In this example, we optimize the validation accuracy of cancer detection using
-Catboost. We optimize both the choice of booster model and their hyperparameters.
-
-"""
-
-import numpy as np
-import optuna
-
 import catboost as cb
-from sklearn.datasets import load_breast_cancer
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-import preprocessing as pp
-import pandas as pd
-
+from sklearn.metrics import mean_absolute_error,root_mean_squared_error, mean_absolute_percentage_error
 
 def objective(trial,x_train,x_test,y_train,y_test):
         params = {
@@ -41,10 +20,9 @@ def objective(trial,x_train,x_test,y_train,y_test):
             eval_set=(x_test, y_test),
             use_best_model=True
         )
-        preds = gbm.predict(x_test)
-        pred_labels = np.rint(preds)
-        accuracy = accuracy_score(y_test, pred_labels)
-        return accuracy
+        y_pred = gbm.predict(x_test)
+        score = root_mean_squared_error(y_test, y_pred)
+        return score
 
 
 def getHyperParameter(x_train,x_test,y_train,y_test):

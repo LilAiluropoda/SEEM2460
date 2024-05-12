@@ -3,23 +3,21 @@ import model
 import pandas as pd
 import sys
 import helper
-import lgbm_search
-import optuna
 
 def main():
     # Preprocessing
     df = pd.read_csv("./data/car_prices.csv")
     helper.message("[INFO] Start preprocessing data...")
-    df = pp.car_preprocessing(df)
+    df, mapper, scaler = pp.car_preprocessing(df)
     x_train, x_test, y_train, y_test = pp.generate_dataset(df, "sellingprice", 0.2)
     # Train LightGBM
-    helper.message("[INFO] Start training (LightGBM)...")
-    lgbm = model.LightGBM()
-    lgbm.train(x_train, y_train, x_test, y_test)
-    helper.message("[INFO] Training completed (LightGBM).")
-    # Report LightGBM Feature Importance
-    helper.message("[INFO] Generating Feature Report (LightGBM)...")
-    lgbm.feature_report(x_train, y_train)
+    # helper.message("[INFO] Start training (LightGBM)...")
+    # lgbm = model.LightGBM()
+    # lgbm.train(x_train, y_train, x_test, y_test)
+    # helper.message("[INFO] Training completed (LightGBM).")
+    # # Report LightGBM Feature Importance
+    # helper.message("[INFO] Generating Feature Report (LightGBM)...")
+    # lgbm.feature_report(x_train, y_train)
 
     # Train CatBoost
     helper.message("[INFO] Start training (CatBoost)...")
