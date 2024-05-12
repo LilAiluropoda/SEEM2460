@@ -54,7 +54,8 @@ class LightGBM:
         helper.message("[INFO] Training explainer for LightGBM ...")
         tree = shap.TreeExplainer(self.model).shap_values(x_train)
         helper.message("[INFO] Training completed, visualising...")
-        shap.summary_plot(tree, x_train, plot_type="bar")
+        shap.summary_plot(tree, x_train, plot_type="bar",show=False)
+        plt.savefig("graphs/lgb_feature_report.png") 
         plt.show()
         return 0
     
@@ -68,7 +69,8 @@ class LightGBM:
         return 0
 
     def training_report(self):
-        lgb.plot_metric(self.train_loss)
+        fig = lgb.plot_metric(self.train_loss)
+        plt.savefig("graphs/lgb_training_report.png") 
         plt.show()
         return 0
 
@@ -122,7 +124,8 @@ class CatBoost:
         helper.message("[INFO] Training explainer for CatBoost ...")
         tree = shap.TreeExplainer(self.model).shap_values(x_train)
         helper.message("[INFO] Training completed, visualising...")
-        shap.summary_plot(tree, x_train, plot_type="bar")
+        shap.summary_plot(tree, x_train, plot_type="bar",show=False)
+        plt.savefig("graphs/cbt_feature_report.png") 
         plt.show()
         return 0
 
@@ -142,7 +145,8 @@ class CatBoost:
         plt.title("CatBoost Training Progress")
         plt.legend()
         plt.grid()
-        plt.show()
+        plt.savefig("graphs/cbt_training_report.png") 
+        plt.show() 
         return 0
 
     def eval(self, x_test, y_test):
