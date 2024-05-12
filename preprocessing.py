@@ -8,7 +8,7 @@ def transform_categorical(df, cols: list[str]):
     for col in cols:
         mapped_col, tmp_map = pd.factorize(df[col])
         mapper[col] = tmp_map
-        #index starts at 1
+        # index starts at 1
         df[col] = pd.Categorical(mapped_col + 1)
     return df, mapper
 
@@ -54,14 +54,24 @@ def transform_scaling(df: pd.DataFrame, cols: list[str]):
         df[col] = scaler[col].transform(df[col].values.reshape(-1, 1))
     return df, scaler
 
+
 def generate_dataset(df: pd.DataFrame, target: str, test_size: float):
     x = df.drop(columns=[target], axis=1)
     y = df[target]
-    x_train, x_test, y_train, y_test = train_test_split(
+    # Split training set and testing set
+    x_tmp, x_test, y_tmp, y_test = train_test_split(
         x,
         y,
         test_size=test_size,
         random_state=314
     )
-    return x_train, x_test, y_train, y_test
+
+    # Split training set and validating set
+    x_train, x_valid, y_train, y_valid = train_test_split(
+        x_tmp,
+        y_tmp,
+        test_size=test_size,
+        random_state=314
+    )
+    return x_train, x_test, x_valid, y_train, y_test, y_valid
 

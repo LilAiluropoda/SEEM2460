@@ -3,6 +3,7 @@ from catboost import CatBoostRegressor
 import matplotlib.pyplot as plt
 import shap
 import helper
+from sklearn.metrics import mean_absolute_error, root_mean_squared_error, mean_absolute_percentage_error
 
 
 class LightGBM:
@@ -11,8 +12,8 @@ class LightGBM:
     param = {
         # TODO: Hyperparameter Tuning
         # Must have, cannot be changed
-        "device_type":"cpu",
-        "num_threads":8
+        "device_type": "cpu",
+        "num_threads": 8
     }
 
     def train(self, x_train, y_train, x_test, y_test):
@@ -38,6 +39,15 @@ class LightGBM:
         helper.message("[INFO] Training completed, visualising...")
         shap.summary_plot(tree, x_train)
         plt.show()
+        return 0
+
+    def eval(self, x_test, y_test):
+        y_pred = self.model.predict(x_test)
+        res = ("Evaluation Report (LightGBM)\n\n" +
+                "RMSE: " + str(root_mean_squared_error(y_test, y_pred)) + "\n" +
+                "MAE: " + str(mean_absolute_error(y_test, y_pred)) + "\n")
+                # + "Accuracy (1-MAPE): " + str(mean_absolute_percentage_error(y_test, y_pred)))
+        helper.message(res)
         return 0
 
 
@@ -68,4 +78,13 @@ class CatBoost:
         helper.message("[INFO] Training completed, visualising...")
         shap.summary_plot(tree, x_train)
         plt.show()
+        return 0
+
+    def eval(self, x_test, y_test):
+        y_pred = self.model.predict(x_test)
+        res = (("Evaluation Report (CatBoost)\n\n" +
+                "RMSE: " + str(root_mean_squared_error(y_test, y_pred)) + "\n" +
+                "MAE: " + str(mean_absolute_error(y_test, y_pred)) + "\n"))
+                # + "Accuracy (1-MAPE): " + str(mean_absolute_percentage_error(y_test, y_pred)))
+        helper.message(res)
         return 0
