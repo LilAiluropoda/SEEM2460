@@ -5,7 +5,6 @@ from sklearn.preprocessing import MinMaxScaler
 
 
 def transform_categorical(df, cols: list[str]):
-def transform_categorical(df, cols: list[str]):
     mapper = {}
     for col in cols:
         mapped_col, tmp_map = pd.factorize(df[col])
