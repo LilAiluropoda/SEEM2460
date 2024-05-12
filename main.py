@@ -4,6 +4,7 @@ import pandas as pd
 import sys
 import helper
 
+
 def main():
     # Preprocessing
     df = pd.read_csv("./data/car_prices.csv")
