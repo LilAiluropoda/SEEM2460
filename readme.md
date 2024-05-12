@@ -3,9 +3,9 @@
 ## Requirement
 
 | Package      | Version          |
-| ------------ | ---------------- |
+|--------------|------------------|
 | python       | 3.11.9 or above  |
-| ipython      | 8.24.0 or above  |
+| ipython      | 8.24.0 or above  | 
 | catboost     | 1.2.5 or above   |
 | lightgbm     | 4.3.0 or above   |
 | matplotlib   | 3.8.4 or above   |
