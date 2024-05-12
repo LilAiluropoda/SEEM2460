@@ -1,4 +1,4 @@
-# SEEM2460 Final Project
+`# SEEM2460 Final Project
 ## Requirement
 
 | Package      | Version          |
@@ -13,7 +13,9 @@
 | scikit-learn | 1.4.2 or above   |
 | PyQt5        | 5.15.10 or above |
 | dython       | 0.7.5 or above   |
-| seabron      | 0.13.2 or above  |
+| seaborn      | 0.13.2 or above  |
+| setuptools   | 69.5.1 or above  |
 
 Install these packages in your Python environment to execute the code correctly.
 
+`

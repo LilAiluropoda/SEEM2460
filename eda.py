@@ -1,6 +1,5 @@
 import preprocessing as pp
 import pandas as pd
-import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
 import helper
@@ -32,7 +31,7 @@ df = pp.car_preprocessing(df)
 # visualize correlation matrix
 helper.message("[INFO] Start visualizing correlation matrix...")
 corr_matrix_visualize(df, "corr_matrix_visualize")
-helper.message("[INFO] Visualize completed.")
+helper.message("[INFO] Visualization completed.")
 
 # drop similar columns, >=0.99
 drop_col = ["make"]
@@ -42,4 +41,4 @@ helper.message(f"[INFO] Dropped col: {drop_col}")
 # visualize correlation matrix
 helper.message("[INFO] Start visualizing correlation matrix...")
 corr_matrix_visualize(df, "corr_matrix_visualize_min")
-helper.message("[INFO] Visualize completed.")
+helper.message("[INFO] Visualization completed.")
