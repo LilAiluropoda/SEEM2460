@@ -24,6 +24,12 @@ def main():
     cbt.train(x_train, y_train, x_valid, y_valid)
     helper.message("[INFO] Training completed (CatBoost).")
 
+    # Generate training report
+    helper.message("[INFO] Generating Training Report (LightGBM)...")
+    lgbm.training_report()
+    helper.message("[INFO] Generating Training Report (CatBoost)...")
+    cbt.training_report()
+
     # Evaluate LightGBM performance
     lgbm.eval(x_test, y_test)
 

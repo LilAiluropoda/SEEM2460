@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
-import message as msg
+import helper
 from dython.nominal import identify_nominal_columns, associations
 
 
@@ -26,20 +26,20 @@ def matrix_scatter_visualize():
 df = pd.read_csv("./data/car_prices.csv")
 
 # preprocess data
-msg.message("[INFO] Start preprocessing data...")
+helper.message("[INFO] Start preprocessing data...")
 df = pp.car_preprocessing(df)
 
 # visualize correlation matrix
-msg.message("[INFO] Start visualizing correlation matrix...")
+helper.message("[INFO] Start visualizing correlation matrix...")
 corr_matrix_visualize(df, "corr_matrix_visualize")
-msg.message("[INFO] Visualize completed.")
+helper.message("[INFO] Visualize completed.")
 
 # drop similar columns, >=0.99
 drop_col = ["make"]
 df.drop(drop_col, axis="columns", inplace=True)
-msg.message(f"[INFO] Dropped col: {drop_col}")
+helper.message(f"[INFO] Dropped col: {drop_col}")
 
 # visualize correlation matrix
-msg.message("[INFO] Start visualizing correlation matrix...")
+helper.message("[INFO] Start visualizing correlation matrix...")
 corr_matrix_visualize(df, "corr_matrix_visualize_min")
-msg.message("[INFO] Visualize completed.")
+helper.message("[INFO] Visualize completed.")
