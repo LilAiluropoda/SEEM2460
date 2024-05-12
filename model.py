@@ -8,6 +8,7 @@ import lgbm_search
 import catboost_search
 from sklearn.metrics import mean_absolute_error, root_mean_squared_error, mean_absolute_percentage_error
 
+
 class LightGBM:
     model = None
     train_loss = {}

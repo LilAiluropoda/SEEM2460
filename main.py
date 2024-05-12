@@ -3,6 +3,8 @@ import model
 import pandas as pd
 import sys
 import helper
+import eda
+import matplotlib.pyplot as plt
 
 
 def main():
@@ -11,6 +13,18 @@ def main():
     helper.message("[INFO] Start preprocessing data...")
     df, mapper, scaler = pp.car_preprocessing(df)
     x_train, x_test, x_valid, y_train, y_test, y_valid = pp.generate_dataset(df, "sellingprice", 0.2)
+
+    # Exploratory Data Analysis
+    helper.message("[INFO] Performing EDA...")
+    helper.message("[INFO] Start visualizing correlation matrix...")
+    eda.corr_matrix_visualize(df, "corr_matrix_visualize")
+    helper.message("[INFO] Visualization completed.")
+    helper.message("[INFO] Start running hypothesis testing on variable independence")
+    helper.message(eda.f_test(df, "sellingprice").sort_values(by="t-statistic", ascending=False).info)
+    # chi2_summary.style.bar("t-statistic").background_gradient("Blues", subset="t-statistic")
+    # plt.show()
+    helper.message("[INFO] Test completed")
+    helper.message("[INFO] EDA completed.")
 
     # Train LightGBM
     helper.message("[INFO] Start training (LightGBM)...")

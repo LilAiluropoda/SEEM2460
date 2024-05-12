@@ -16,5 +16,6 @@
 | seaborn      | 0.13.2 or above  |
 | optuna       | 3.6.1 or above   |
 | setuptools   | 69.5.1 or above  |
+| Jinja2       | 3.1.4 or above   |
 
 Install these packages in your Python environment to execute the code correctly.
