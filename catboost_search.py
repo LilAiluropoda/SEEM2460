@@ -8,7 +8,7 @@ def objective(trial, x_train, x_test, y_train, y_test):
     params = {
         "cat_features": ["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"],
         "verbose": 0,
-        "iterations": 1000,
+        "iterations": 200,
         "learning_rate": trial.suggest_float("learning_rate", 1e-3, 0.1, log=True),
         "depth": trial.suggest_int("depth", 1, 10),
         "subsample": trial.suggest_float("subsample", 0.05, 1.0),

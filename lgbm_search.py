@@ -27,7 +27,7 @@ def objective(trial, x_train, x_test, y_train, y_test):
         "bagging_fraction": trial.suggest_float("bagging_fraction", 0.4, 1.0),
         "bagging_freq": trial.suggest_int("bagging_freq", 1, 7),
     }
-    gbm = lgb.train(param, train_data, valid_sets=[test_data], num_boost_round=100)
+    gbm = lgb.train(param, train_data, valid_sets=[test_data], num_boost_round=300)
     y_pred = gbm.predict(x_test)
     score = root_mean_squared_error(y_test, y_pred)
     return score
