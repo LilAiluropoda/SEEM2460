@@ -5,14 +5,15 @@ import matplotlib.pyplot as plt
 from dython.nominal import identify_nominal_columns, associations
 from scipy.stats.contingency import chi2_contingency
 from sklearn.feature_selection import chi2, f_regression
-
+from pandas.plotting import table
+import dataframe_image as dfi
 
 # Visualize correlation matrix
 def corr_matrix_visualize(df: pd.DataFrame, filename: str):
     categorical_features = identify_nominal_columns(df)
     # Debug Message
     # print("categorical features: ", categorical_features)
-    complete_correlation = associations(df, filename=f'{filename}.png', figsize=(10, 10))
+    complete_correlation = associations(df, filename=f'graphs/{filename}.png', figsize=(10, 10))
     df_complete_corr = complete_correlation['corr']
     df_complete_corr.dropna(axis=1, how='all').dropna(axis=0, how='all').style.background_gradient(cmap='coolwarm', axis=None)
     return 0
@@ -38,8 +39,11 @@ def f_test(df: pd.DataFrame, target: str):
     for i, col in enumerate(x, start=len(summary)-len(x)):
         t_stat, pvalue = f_regression(df[[col]], df[target].values.reshape(-1, 1))
         summary[i, :] = [col, t_stat[0], pvalue[0]]
-
-    return pd.DataFrame(
+    data = pd.DataFrame(
         data=summary,
         columns=["column", 't-statistic', "p-value"]
     )
+    summary = data.sort_values(by="t-statistic", ascending=False)
+    df_styled = summary.style.bar("t-statistic").background_gradient("Blues", subset="t-statistic")
+    dfi.export(df_styled, 'graphs/f_test.png')
+    return data
