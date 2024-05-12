@@ -8,12 +8,12 @@ def objective(trial,x_train,x_test,y_train,y_test):
     train_data = lgb.Dataset(x_train, label=y_train)
     param = {
         "objective": "regression",
-        "metric": "rnse",
+        "metric": "rmse",
         "verbosity": -1,
         "boosting_type": "gbdt",
         "device_type":"cpu",
         "num_threads":8,
-        "n_estimators": trial.suggest_categorical("n_estimators", [10000]),
+        "n_estimators": trial.suggest_categorical("n_estimators", [1000]),
         "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.3),
         "lambda_l1": trial.suggest_float("lambda_l1", 1e-8, 10.0, log=True),
         "lambda_l2": trial.suggest_float("lambda_l2", 1e-8, 10.0, log=True),
@@ -27,12 +27,15 @@ def objective(trial,x_train,x_test,y_train,y_test):
         "min_child_samples": trial.suggest_int("min_child_samples", 5, 100),
     }
 
+ 
+ 
     gbm = lgb.train(param, train_data)
     preds = gbm.predict(x_test)
     pred_labels = np.rint(preds)
+    print(type(y_test))
+    print(type(pred_labels))
     accuracy = sklearn.metrics.accuracy_score(y_test, pred_labels)
     return accuracy
-
 
 def getHyperParameter(x_train,x_test,y_train,y_test):
     study = optuna.create_study(direction="maximize")

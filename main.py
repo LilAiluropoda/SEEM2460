@@ -3,7 +3,7 @@ import model
 import pandas as pd
 import sys
 import helper
-import search
+import lgbm_search
 import optuna
 
 def main():
@@ -17,7 +17,6 @@ def main():
     lgbm = model.LightGBM()
     lgbm.train(x_train, y_train, x_test, y_test)
     helper.message("[INFO] Training completed (LightGBM).")
-
     # Report LightGBM Feature Importance
     helper.message("[INFO] Generating Feature Report (LightGBM)...")
     lgbm.feature_report(x_train, y_train)

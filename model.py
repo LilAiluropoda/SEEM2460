@@ -3,7 +3,8 @@ from catboost import CatBoostRegressor
 import matplotlib.pyplot as plt
 import shap
 import helper
-import optuna
+import lgbm_search
+import carboost_search
 import search
 
 class LightGBM:
@@ -21,12 +22,12 @@ class LightGBM:
         train_data = lgb.Dataset(x_train, label=y_train)
         test_data = lgb.Dataset(x_test, label=y_test)
         # use optuna to find the HyperParameter
-        lgbmHP = search.getHyperParameter(x_train,x_test,y_train,y_test)
+        lgbmHP = lgbm_search.getHyperParameter(x_train,x_test,y_train,y_test)
         lgbmHP['device_type'] = "cpu"
         lgbmHP['num_threads'] = 8
         # Create model
         self.model = lgb.train(
-            self.param,
+            lgbmHP,
             num_boost_round=self.train_round,
             train_set=train_data,
             valid_sets=[test_data],
@@ -50,12 +51,15 @@ class CatBoost:
     param = {
         # TODO: Hyperparameter Tuning
         # Must have, cannot be changed
-        'cat_features': ["make", "model", "trim", "body", "transmission", "color", "interior", "seller"],
+        'cat_features':["make", "model", "trim", "body", "transmission", "color", "interior", "seller"],
         'verbose': 200
     }
-
+       
     def train(self, x_train, y_train, x_test, y_test):
-        self.model = CatBoostRegressor(**self.param)
+        params = carboost_search.getHyperParameter(x_train,x_test,y_train,y_test)
+        params['cat_features'] =["make", "model", "trim", "body", "transmission", "color", "interior", "seller"]
+        params['verbose'] = 200
+        self.model = CatBoostRegressor(**params)
         self.model.fit(
             x_train,
             y_train,
