@@ -1,5 +1,4 @@
 # SEEM2460 Final Project
-
 ## Requirement
 
 | Package      | Version          |
@@ -16,6 +15,6 @@
 | dython       | 0.7.5 or above   |
 | seaborn      | 0.13.2 or above  |
 | optuna       | 3.6.1 or above   |
+| setuptools   | 69.5.1 or above  |
 
 Install these packages in your Python environment to execute the code correctly.
-
