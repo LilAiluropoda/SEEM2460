@@ -26,11 +26,6 @@ def transform_datetime(df: pd.DataFrame, col: str):
     df[col + "_month"] = df[col + "_month"].astype("category")
     df[col + "_day"] = df[col + "_day"].astype("category")
 
-    # Set date as categorical variable
-    df[col + "_year"] = df[col + "_year"].astype("category")
-    df[col + "_month"] = df[col + "_month"].astype("category")
-    df[col + "_day"] = df[col + "_day"].astype("category")
-
     # Remove saledate columns
     df.drop(columns=[col, tmp], inplace=True)
     return df

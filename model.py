@@ -42,6 +42,7 @@ class LightGBM:
         helper.message("[INFO] Training model with tuned hyperparameter ... ")
         self.model = lgb.train(
             param,
+            num_boost_round=300,
             train_set=train_data,
             valid_sets=[train_data, test_data],
             callbacks=[lgb.log_evaluation(), lgb.record_evaluation(eval_result=self.train_loss)]
@@ -97,7 +98,7 @@ class CatBoost:
         param["verbose"] = 200
         param["thread_count"] = 8
         param["task_type"] = "CPU"
-        param["iterations"] = 1000
+        param["iterations"] = 200
         
         helper.message("[INFO] Tuning completed.")
         helper.message(param)
