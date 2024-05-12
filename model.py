@@ -92,7 +92,7 @@ class CatBoost:
 
         # Add compulsory hyperparameter
         param["cat_features"] = ["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"]
-        param["verbosity"] = 200
+        param["verbose"] = 200
         param["thread_count"] = 8
         param["task_type"] = "CPU"
         param["iterations"] = 1000
