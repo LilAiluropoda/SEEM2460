@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 import shap
 import helper
 import numpy as np
+import lgbm_search
+import carboost_search
 from sklearn.metrics import mean_absolute_error, root_mean_squared_error, mean_absolute_percentage_error
-
 
 class LightGBM:
     model = None
@@ -17,15 +18,18 @@ class LightGBM:
         "device_type": "cpu",
         "num_threads": 8
     }
-
+    
     def train(self, x_train, y_train, x_test, y_test):
         # Wrapping train and test dataset
         train_data = lgb.Dataset(x_train, label=y_train)
         test_data = lgb.Dataset(x_test, label=y_test)
-
+        # use optuna to find the HyperParameter
+        lgbmHP = lgbm_search.getHyperParameter(x_train,x_test,y_train,y_test)
+        lgbmHP['device_type'] = "cpu"
+        lgbmHP['num_threads'] = 8
         # Create model
         self.model = lgb.train(
-            self.param,
+            lgbmHP,
             num_boost_round=self.train_round,
             train_set=train_data,
             valid_sets=[train_data, test_data],
@@ -41,6 +45,15 @@ class LightGBM:
         helper.message("[INFO] Training completed, visualising...")
         shap.summary_plot(tree, x_train, plot_type='bar')
         plt.show()
+        return 0
+    
+    def eval(self, x_test, y_test):
+        y_pred = self.model.predict(x_test)
+        res = ("Evaluation Report (LightGBM)\n\n" +
+                "RMSE: " + str(root_mean_squared_error(y_test, y_pred)) + "\n" +
+                "MAE: " + str(mean_absolute_error(y_test, y_pred)) + "\n")
+                # + "Accuracy (1-MAPE): " + str(mean_absolute_percentage_error(y_test, y_pred)))
+        helper.message(res)
         return 0
 
     def training_report(self):
@@ -68,9 +81,13 @@ class CatBoost:
         'thread_count': 8,
         'task_type': 'CPU'
     }
-
+       
     def train(self, x_train, y_train, x_test, y_test):
-        self.model = CatBoostRegressor(**self.param)
+        params = carboost_search.getHyperParameter(x_train,x_test,y_train,y_test)
+        params['cat_features'] =["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"]
+        params['verbose'] = 200
+        print(params)
+        self.model = CatBoostRegressor(**params)
         self.model.fit(
             x_train,
             y_train,

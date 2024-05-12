@@ -1,8 +1,10 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 
 
+def transform_categorical(df, cols: list[str]):
 def transform_categorical(df, cols: list[str]):
     mapper = {}
     for col in cols:
@@ -25,6 +27,11 @@ def transform_datetime(df: pd.DataFrame, col: str):
     df[col + "_month"] = df[col + "_month"].astype("category")
     df[col + "_day"] = df[col + "_day"].astype("category")
 
+    # Set date as categorical variable
+    df[col + "_year"] = df[col + "_year"].astype("category")
+    df[col + "_month"] = df[col + "_month"].astype("category")
+    df[col + "_day"] = df[col + "_day"].astype("category")
+
     # Remove saledate columns
     df.drop(columns=[col, tmp], inplace=True)
     return df
@@ -38,7 +45,10 @@ def car_preprocessing(df: pd.DataFrame):
     # Split saledate into year, month, and day
     df = transform_datetime(df, "saledate")
     # Transform specified columns into categorical variables
+    # Transform specified columns into categorical variables
     df, mapper = transform_categorical(df, ["make", "model", "trim", "body", "transmission", "color", "interior", "seller"])
+    # Transform specified columns into scaled numerical variables
+    df, scaler = transform_scaling(df, ["year", "condition", "odometer", "mmr", "sellingprice"])
     # Transform specified columns into scaled numerical variables
     df, scaler = transform_scaling(df, ["year", "condition", "odometer", "mmr", "sellingprice"])
     df.info()
