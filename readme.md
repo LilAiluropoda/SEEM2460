@@ -3,7 +3,7 @@
 ## Requirement
 
 | Package         | Version          |
-| --------------- | ---------------- |
+|-----------------|------------------|
 | python          | 3.11.9 or above  |
 | ipython         | 8.24.0 or above  |
 | catboost        | 1.2.5 or above   |
@@ -19,5 +19,6 @@
 | setuptools      | 69.5.1 or above  |
 | Jinja2          | 3.1.4 or above   |
 | dataframe_image | 0.2.3 or above   |
+| selenium        | 4.20.0 or above  |
 
 Install these packages in your Python environment to execute the code correctly.

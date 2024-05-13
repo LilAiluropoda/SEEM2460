@@ -45,5 +45,5 @@ def f_test(df: pd.DataFrame, target: str):
     )
     summary = data.sort_values(by="t-statistic", ascending=False)
     df_styled = summary.style.bar("t-statistic").background_gradient("Blues", subset="t-statistic")
-    dfi.export(df_styled, 'graphs/f_test.png')
+    dfi.export(df_styled, 'graphs/f_test.png', table_conversion="selenium")
     return data

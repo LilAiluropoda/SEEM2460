@@ -34,21 +34,19 @@ def transform_datetime(df: pd.DataFrame, col: str):
 def car_preprocessing(df: pd.DataFrame):
     # Remove rows with missing values
     df.dropna(inplace=True)
+    # Remove rows with duplicate values
+    df.drop_duplicates(inplace=True)
     # Remove vin identifier, state
     df.drop(columns=["vin", "state"], inplace=True)
     # Split saledate into year, month, and day
     df = transform_datetime(df, "saledate")
     # Transform specified columns into categorical variables
-    # Transform specified columns into categorical variables
     df, mapper = transform_categorical(df, ["make", "model", "trim", "body", "transmission", "color", "interior", "seller"])
-    # Transform specified columns into scaled numerical variables
-    df, scaler = transform_scaling(df, ["year", "condition", "odometer", "mmr", "sellingprice"])
-    # Transform specified columns into scaled numerical variables
-    df, scaler = transform_scaling(df, ["year", "condition", "odometer", "mmr", "sellingprice"])
     df.info()
-    return df, mapper, scaler
+    return df, mapper
 
 
+# Not Used: decision tree models do not need data scaling
 def transform_scaling(df: pd.DataFrame, cols: list[str]):
     scaler = {}
     for col in cols:

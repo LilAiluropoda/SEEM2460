@@ -22,7 +22,7 @@ class LightGBM:
         param["verbosity"] = 1
         param["num_threads"] = 8
         param["device_type"] = "cpu"
-        param["early_stopping_round"] = 5
+        param["early_stopping_round"] = 10
         param["objective"] = "regression"
         param["metric"] = "rmse"
         
@@ -32,8 +32,8 @@ class LightGBM:
 
     def train(self, x_train, y_train, x_valid, y_valid):
         # Wrapping train and test dataset
-        train_data = lgb.Dataset(x_train, label=y_train)
-        test_data = lgb.Dataset(x_valid, label=y_valid)
+        train_data = lgb.Dataset(x_train, label=y_train, categorical_feature=["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"])
+        test_data = lgb.Dataset(x_valid, label=y_valid, categorical_feature=["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"])
 
         # Tune hyperparameter
         param = self.get_param(x_train, x_valid, y_train, y_valid)
@@ -42,7 +42,7 @@ class LightGBM:
         helper.message("[INFO] Training model with tuned hyperparameter ... ")
         self.model = lgb.train(
             param,
-            num_boost_round=300,
+            num_boost_round=200,
             train_set=train_data,
             valid_sets=[train_data, test_data],
             callbacks=[lgb.log_evaluation(), lgb.record_evaluation(eval_result=self.train_loss)]
@@ -65,7 +65,6 @@ class LightGBM:
         res = ("Evaluation Report (LightGBM)\n\n" +
                 "RMSE: " + str(root_mean_squared_error(y_valid, y_pred)) + "\n" +
                 "MAE: " + str(mean_absolute_error(y_valid, y_pred)) + "\n")
-                # + "Accuracy (1-MAPE): " + str(mean_absolute_percentage_error(y_valid, y_pred)))
         helper.message(res)
         return 0
 
@@ -77,10 +76,14 @@ class LightGBM:
 
     def eval(self, x_test, y_test):
         y_pred = self.model.predict(x_test)
+        plt.plot(list(range(len(y_pred))), y_test, label="actual")
+        plt.plot(list(range(len(y_pred))), y_pred, label="predict")
+        plt.legend()
+        plt.savefig("graphs/lgb_predict_graph.png")
+        plt.show()
         res = ("Evaluation Report (LightGBM)\n\n" +
                 "RMSE: " + str(root_mean_squared_error(y_test, y_pred)) + "\n" +
                 "MAE: " + str(mean_absolute_error(y_test, y_pred)) + "\n")
-                # + "Accuracy (1-MAPE): " + str(mean_absolute_percentage_error(y_test, y_pred)))
         helper.message(res)
         return 0
 
@@ -115,6 +118,7 @@ class CatBoost:
             x_train,
             y_train,
             eval_set=(x_valid, y_valid),
+            early_stopping_rounds=10,
             use_best_model=True
         )
         return 0
@@ -152,9 +156,13 @@ class CatBoost:
 
     def eval(self, x_test, y_test):
         y_pred = self.model.predict(x_test)
+        plt.plot(list(range(len(y_pred))), y_test, label="actual")
+        plt.plot(list(range(len(y_pred))), y_pred, label="predict")
+        plt.legend()
+        plt.savefig("graphs/cbt_predict_graph.png")
+        plt.show()
         res = (("Evaluation Report (CatBoost)\n\n" +
                 "RMSE: " + str(root_mean_squared_error(y_test, y_pred)) + "\n" +
                 "MAE: " + str(mean_absolute_error(y_test, y_pred)) + "\n"))
-                # + "Accuracy (1-MAPE): " + str(mean_absolute_percentage_error(y_test, y_pred)))
         helper.message(res)
         return 0

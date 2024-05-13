@@ -23,7 +23,7 @@ def objective(trial, x_train, x_test, y_train, y_test):
         y_train,
         eval_set=(x_test, y_test),
         use_best_model=True,
-        early_stopping_rounds=2,
+        early_stopping_rounds=10,
         verbose=False
     )
     y_pred = cbt.predict(x_test)

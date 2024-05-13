@@ -11,7 +11,7 @@ def main():
     # Preprocessing
     df = pd.read_csv("./data/car_prices.csv")
     helper.message("[INFO] Start preprocessing data...")
-    df, mapper, scaler = pp.car_preprocessing(df)
+    df, mapper = pp.car_preprocessing(df)
     x_train, x_test, x_valid, y_train, y_test, y_valid = pp.generate_dataset(df, "sellingprice", 0.2)
 
     # Exploratory Data Analysis
