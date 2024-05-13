@@ -32,8 +32,9 @@ class LightGBM:
 
     def train(self, x_train, y_train, x_valid, y_valid):
         # Wrapping train and test dataset
-        train_data = lgb.Dataset(x_train, label=y_train, categorical_feature=["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"])
-        test_data = lgb.Dataset(x_valid, label=y_valid, categorical_feature=["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"])
+        # OPTIMIZE: Drop saledate_year, saledate_month, saledate_day, interior, transmission
+        train_data = lgb.Dataset(x_train, label=y_train, categorical_feature=["make", "model", "trim", "body", "color", "seller", "saledate_month", "saledate_day"])
+        test_data = lgb.Dataset(x_valid, label=y_valid, categorical_feature=["make", "model", "trim", "body", "color", "seller", "saledate_month", "saledate_day"])
 
         # Tune hyperparameter
         param = self.get_param(x_train, x_valid, y_train, y_valid)
@@ -97,7 +98,8 @@ class CatBoost:
         param = catboost_search.getHyperParameter(x_train, x_valid, y_train, y_valid)
 
         # Add compulsory hyperparameter
-        param["cat_features"] = ["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"]
+        # OPTIMIZE: Drop saledate_year, saledate_month, saledate_day, interior, transmission
+        param["cat_features"] = ["make", "model", "trim", "body", "color", "seller", "saledate_month", "saledate_day"]
         param["verbose"] = 200
         param["thread_count"] = 8
         param["task_type"] = "CPU"

@@ -6,8 +6,9 @@ import sklearn.metrics
 
 
 def objective(trial, x_train, x_test, y_train, y_test):
-    train_data = lgb.Dataset(x_train, label=y_train, categorical_feature=["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"])
-    test_data = lgb.Dataset(x_test, label=y_test, categorical_feature=["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"])
+    # OPTIMIZE: Drop saledate_year, saledate_month, saledate_day, interior, transmission
+    train_data = lgb.Dataset(x_train, label=y_train, categorical_feature=["make", "model", "trim", "body", "color", "seller", "saledate_month", "saledate_day"])
+    test_data = lgb.Dataset(x_test, label=y_test, categorical_feature=["make", "model", "trim", "body", "color", "seller", "saledate_month", "saledate_day"])
     param = {
         "objective": "regression",
         "metric": "rmse",

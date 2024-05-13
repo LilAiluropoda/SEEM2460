@@ -6,7 +6,8 @@ from sklearn.metrics import mean_absolute_error,root_mean_squared_error, mean_ab
 
 def objective(trial, x_train, x_test, y_train, y_test):
     params = {
-        "cat_features": ["make", "model", "trim", "body", "transmission", "color", "interior", "seller", "saledate_day", "saledate_month", "saledate_year"],
+        # OPTIMIZE: Drop saledate_year, saledate_month, saledate_day, interior, transmission
+        "cat_features": ["make", "model", "trim", "body", "color", "seller", "saledate_month", "saledate_day"],
         "verbose": 0,
         "iterations": 200,
         "learning_rate": trial.suggest_float("learning_rate", 1e-3, 0.1, log=True),

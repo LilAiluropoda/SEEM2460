@@ -42,6 +42,8 @@ def car_preprocessing(df: pd.DataFrame):
     df = transform_datetime(df, "saledate")
     # Transform specified columns into categorical variables
     df, mapper = transform_categorical(df, ["make", "model", "trim", "body", "transmission", "color", "interior", "seller"])
+    # OPTIMIZE: Drop saledate_year, interior, transmission
+    df.drop(columns=["saledate_year", "interior", "transmission"], inplace=True)
     df.info()
     return df, mapper
 
